@@ -1,0 +1,80 @@
+<html>
+<body>
+
+<!-- load the male avatar sprite sheet -->
+<!-- hide the loaded resources with inline css style -->
+<p><img class="avatar" id="male_avatar" src="./resources/images/male_avatar.jpg" style="display: none"></p>
+
+<!-- create a canvas with set dimensions and border -->
+<canvas id="canvas" width="624" height="300" style="border:1px solid #000000"></canvas>
+
+<script>
+// window.onload will run immediately after the page have finish loading
+// paint the canvas white
+window.onload = function() {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(0, 0, 624, 300);
+}
+
+// draw the avatar with specific x-positions
+function animation(xPos) {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var avatar = document.getElementById("male_avatar");
+	
+	var width = 104;
+	var height = 150;
+	var xStart = xPos * width;
+	var yStart = 0;
+	var xEnd = xPos * width;
+	var yEnd = 140;	
+	context.drawImage(avatar, xStart, yStart, width, height, xEnd, yEnd, width, height);
+}
+
+// draw a white rectangle on the canvas
+function clearFrame(xPos) {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	context.clearRect((xPos*104), 0, 104, 290);
+}
+
+// clear the canvas
+function clearAll() {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	context.clearRect(0, 0, 624, 300);
+}
+
+// use setInterval() to do frames manipulation which give the illustion of animation
+function start() {
+	var counter = 0;
+	var i = setInterval(function(){
+
+		// start deleting the previous frame from the 2nd frame index onwards
+		if (counter == 0) {
+			animation(counter);
+			
+		// delete the previous frame before loading the next frame
+		} else if (counter > 0) {
+			clearFrame(counter-1);
+			animation(counter);
+			
+		// reset the counter when the avatar walk to the end
+		} else {
+			counter = 0;
+		}
+		
+		// increment the frame index
+		counter++;
+
+	}, 250);
+}
+</script>
+
+<!-- button is clicked to invoke start() to begin the animation -->
+<p><button onclick="start()">Start Animation</button></p>
+
+</body>
+</html>
