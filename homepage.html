@@ -1,80 +1,128 @@
 <html>
 <body>
 
-<!-- load the male avatar sprite sheet -->
-<!-- hide the loaded resources with inline css style -->
-<p><img class="avatar" id="male_avatar" src="./resources/images/male_avatar.jpg" style="display: none"></p>
+<!-- load and hide the resources with inline css style -->
+<p>
+<img class="resources" id="avatar" src="./resources/images/avatar.png" style="display: none">
+<img class="resources" id="bg_farm" src="./resources/images/farmland.png" style="display: none">
+<img class="resources" id="bg_beach" src="./resources/images/beach.jpg" style="display: none">
+<img class="resources" id="bg_forest" src="./resources/images/forest.jpg" style="display: none">
+<img class="resources" id="bg_mountain" src="./resources/images/mountain.png" style="display: none">
+</p>
 
 <!-- create a canvas with set dimensions and border -->
-<canvas id="canvas" width="624" height="300" style="border:1px solid #000000"></canvas>
+<canvas id="canvas" width="400" height="300" style="border:1px solid #000000"></canvas>
 
 <script>
-// window.onload will run immediately after the page have finish loading
-// paint the canvas white
+// initialization
 window.onload = function() {
 	var canvas = document.getElementById("canvas");
 	var context = canvas.getContext("2d");
-	context.fillStyle = "#FFFFFF";
-	context.fillRect(0, 0, 624, 300);
-}
-
-// draw the avatar with specific x-positions
-function animation(xPos) {
-	var canvas = document.getElementById("canvas");
-	var context = canvas.getContext("2d");
-	var avatar = document.getElementById("male_avatar");
+	var background = document.getElementById("bg_farm");
 	
-	var width = 104;
-	var height = 150;
-	var xStart = xPos * width;
-	var yStart = 0;
-	var xEnd = xPos * width;
-	var yEnd = 140;	
-	context.drawImage(avatar, xStart, yStart, width, height, xEnd, yEnd, width, height);
+	var canvasWidth = 400;
+	var canvasHeight = 300;
+	
+	context.drawImage(background, 0, 0, canvasWidth, canvasHeight);
 }
-
-// draw a white rectangle on the canvas
-function clearFrame(xPos) {
+	
+// create an array of background images
+var slide = new Array();
+var current = 0;
+var previous = 0;
+slide[0] = document.getElementById("bg_farm");
+slide[1] = document.getElementById("bg_beach");
+slide[2] = document.getElementById("bg_forest");
+slide[3] = document.getElementById("bg_mountain");
+	
+function changeSlide(n) {
 	var canvas = document.getElementById("canvas");
 	var context = canvas.getContext("2d");
-	context.clearRect((xPos*104), 0, 104, 290);
-}
-
-// clear the canvas
-function clearAll() {
-	var canvas = document.getElementById("canvas");
-	var context = canvas.getContext("2d");
-	context.clearRect(0, 0, 624, 300);
-}
-
-// use setInterval() to do frames manipulation which give the illustion of animation
-function start() {
-	var counter = 0;
-	var i = setInterval(function(){
-
-		// start deleting the previous frame from the 2nd frame index onwards
-		if (counter == 0) {
-			animation(counter);
-			
-		// delete the previous frame before loading the next frame
-		} else if (counter > 0) {
-			clearFrame(counter-1);
-			animation(counter);
-			
-		// reset the counter when the avatar walk to the end
+	
+	previous = current;
+	current = current + n;
+	
+	// go back to the first slide after the last slide
+	if (current > (slide.length - 1)) {
+		current = 0;
+		previous = slide.length - 1;
+	}
+	// go forward to the last slide before the first slide
+	if (current < 0) {
+		current = slide.length - 1;
+		previous = 0;
+	}
+	
+	// draw the animations
+	var canvasWidth = 400;
+	var canvasHeight = 300;
+	var posX = 104;
+	var canvasX = 0;
+	var frame = 0;
+	var previousSlide = slide[previous];
+	
+	var animate = setInterval(function() {
+		// clear the canvas
+		context.clearRect(0, 0, canvasWidth, canvasHeight);
+	
+		// draw the background
+		context.drawImage(previousSlide, 0, 0, 400, 300);
+	
+		posX = 104 * frame;
+		draw(posX, canvasX);
+		
+		if (frame > 5) {
+			frame = 0;
 		} else {
-			counter = 0;
+			frame++;
 		}
 		
-		// increment the frame index
-		counter++;
+		if (canvasX > 400) {
+			canvasX = 0;
+			clearInterval(animate);
 
-	}, 250);
+		} else {
+			canvasX +=20;
+		}
+	}, 1000/10);
 }
+
+function changeSlideTwo(n) {
+var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var canvasWidth = 400;
+	var canvasHeight = 300;
+	current = current + n;
+	var currentSlide = slide[current];
+
+	// clear the canvas
+	// draw the next background after animations stop
+	context.clearRect(0, 0, canvasWidth, canvasHeight);
+	context.drawImage(currentSlide, 0, 0, 400, 300);
+}
+
+// draw the animations
+// posX range: 0-624
+// canvasX range: 0-400
+function draw(posX, canvasX) {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var image = document.getElementById("avatar");
+
+	var width = 104;		// avatar width
+	var height = 150;		// avatar height
+	var canvasY = 150;		// end 300
+
+	// draw the avatar
+	context.drawImage(image, posX, 0, 104, 150, canvasX, 150, 104, 150);
+}
+
 </script>
 
-<!-- button is clicked to invoke start() to begin the animation -->
-<p><button onclick="start()">Start Animation</button></p>
+<p style="text-align: left">
+<button onclick="changeSlide(-1)">Previous</button>
+<button onclick="changeSlide(+1)">Next</button>
+</p>
 
 </body>
 </html>
