@@ -1,0 +1,185 @@
+<html>
+<body>
+
+<!-- load and hide the resources with inline css style -->
+<p>
+<img class="resources" id="avatar" src="./resources/images/avatar.png" style="display: none">
+<img class="resources" id="bg_farm" src="./resources/images/farmland.png" style="display: none">
+<img class="resources" id="bg_beach" src="./resources/images/beach.jpg" style="display: none">
+<img class="resources" id="bg_forest" src="./resources/images/forest.jpg" style="display: none">
+<img class="resources" id="bg_mountain" src="./resources/images/mountain.png" style="display: none">
+</p>
+
+<!-- create a canvas with set dimensions and border -->
+<canvas id="canvas" width="400" height="300" style="border:1px solid #000000"></canvas>
+
+<script>
+// create an array of background images
+var slide = new Array();
+slide[0] = document.getElementById("bg_farm");
+slide[1] = document.getElementById("bg_beach");
+slide[2] = document.getElementById("bg_forest");
+slide[3] = document.getElementById("bg_mountain");
+
+// start-up
+window.onload = function() {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var background = slide[0];
+	var avatar = document.getElementById("avatar");
+	
+	var canvasWidth = 400;
+	var canvasHeight = 300;
+	
+	// draw background
+	context.drawImage(background, 0, 0, canvasWidth, canvasHeight);
+	
+	// draw avatar
+	context.drawImage(avatar, 0, 0, 104, 150, 0, 150, 104, 150);
+}
+
+// init
+var canvasX = 0;					// destination x
+var index = 0;						// frame index, total 6 from 0-5
+	
+function drawOne(current, next) {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var image = document.getElementById("avatar");
+	var width = 104;				// avatar width
+	var height = 150;				// avatar height	
+	var posX = (index * width);		// source x
+	
+	context.clearRect(0, 0, 400, 300);
+	context.drawImage(current, 0, 0, 400, 300);
+	context.drawImage(image, posX, 0, 104, 150, canvasX, 150, 104, 150);
+
+	if (canvasX < 400) {
+		canvasX +=5;
+		
+		if (index < 6) {
+			index++;
+		} else {
+			index = 0;
+		}
+
+		var animateOne = requestAnimationFrame(function() {drawOne(slide[0], slide[1]);});
+	} else {
+		cancelAnimationFrame(animateOne);
+		context.clearRect(0, 0, 400, 300);
+		context.drawImage(next, 0, 0, 400, 300);
+		context.drawImage(image, 0, 0, 104, 150, 0, 150, 104, 150);	
+		canvasX = 0;		
+		index = 0;
+	}
+}
+	
+
+function drawTwo(current, next) {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var image = document.getElementById("avatar");
+	var width = 104;				// avatar width
+	var height = 150;				// avatar height	
+	var posX = (index * width);		// source x
+	
+	context.clearRect(0, 0, 400, 300);
+	context.drawImage(current, 0, 0, 400, 300);
+	context.drawImage(image, posX, 0, 104, 150, canvasX, 150, 104, 150);
+
+	if (canvasX < 400) {
+		canvasX +=5;
+	
+		if (index < 6) {
+			index++;
+		} else {
+			index = 0;
+		}
+		var animateTwo = requestAnimationFrame(function() {drawTwo(slide[1], slide[2]);});
+	
+	} else {
+		cancelAnimationFrame(animateTwo);
+		context.clearRect(0, 0, 400, 300);
+		context.drawImage(next, 0, 0, 400, 300);
+		context.drawImage(image, 0, 0, 104, 150, 0, 150, 104, 150);	
+		canvasX = 0;		
+		index = 0;		
+	}
+}
+
+function drawThree(current, next) {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var image = document.getElementById("avatar");
+	var width = 104;				// avatar width
+	var height = 150;				// avatar height	
+	var posX = (index * width);		// source x
+	
+	context.clearRect(0, 0, 400, 300);
+	context.drawImage(current, 0, 0, 400, 300);
+	context.drawImage(image, posX, 0, 104, 150, canvasX, 150, 104, 150);
+
+	if (canvasX < 400) {
+		canvasX +=5;
+	
+		if (index < 6) {
+			index++;
+		} else {
+			index = 0;
+		}
+		var animateThree = requestAnimationFrame(function() {drawThree(slide[2], slide[3]);});
+	
+	} else {
+		cancelAnimationFrame(animateThree);
+		context.clearRect(0, 0, 400, 300);
+		context.drawImage(next, 0, 0, 400, 300);
+		context.drawImage(image, 0, 0, 104, 150, 0, 150, 104, 150);	
+		canvasX = 0;		
+		index = 0;		
+	}
+}
+
+function drawFour(current, next) {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	var image = document.getElementById("avatar");
+	var width = 104;				// avatar width
+	var height = 150;				// avatar height	
+	var posX = (index * width);		// source x
+	
+	context.clearRect(0, 0, 400, 300);
+	context.drawImage(current, 0, 0, 400, 300);
+	context.drawImage(image, posX, 0, 104, 150, canvasX, 150, 104, 150);
+
+	if (canvasX < 400) {
+		canvasX +=5;
+	
+		if (index < 6) {
+			index++;
+		} else {
+			index = 0;
+		}
+		var animateFour = requestAnimationFrame(function() {drawFour(slide[3], slide[0]);});
+	
+	} else {
+		cancelAnimationFrame(animateFour);
+		context.clearRect(0, 0, 400, 300);
+		context.drawImage(next, 0, 0, 400, 300);
+		context.drawImage(image, 0, 0, 104, 150, 0, 150, 104, 150);	
+		canvasX = 0;		
+		index = 0;		
+	}
+}
+
+</script>
+
+<p>
+<button onclick="drawOne(slide[0], slide[1])">Slide 0 to Slide 1</button>
+<button onclick="drawTwo(slide[1], slide[2])">Slide 1 to Slide 2</button>
+<button onclick="drawThree(slide[2], slide[3])">Slide 2 to Slide 3</button>
+</p>
+<p>
+<button onclick="drawFour(slide[3], slide[0])">Slide 3 to Slide 0</button>
+</p>
+</body>
+</html>
