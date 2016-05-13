@@ -1,0 +1,90 @@
+<html>
+<body>
+
+<canvas id="canvas" width="400" height="300" style="border:1px solid #000000"></canvas>
+
+<script>
+var arrow = document.createElement("img");
+arrow.src = "http://i.imgur.com/yABYhvz.png";	// size 24x24
+
+var farm = document.createElement("img");
+farm.src = "http://i.imgur.com/fH1sJLR.png";
+
+var beach = document.createElement("img");
+beach.src = "http://i.imgur.com/gEht9R9.png";
+
+var forest = document.createElement("img");
+forest.src = "http://i.imgur.com/188z1kY.png";
+
+window.onload = function() {
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	
+	// draw background
+	context.drawImage(farm, 0, 0, 400, 300);
+
+	// draw the arrows
+	context.drawImage(arrow, 376, 75, 24, 24);
+	context.drawImage(arrow, 376, 225, 24, 24);
+	
+	// attach a mouse click event listener onto the right arrow image
+	canvas.addEventListener("mousedown", next, false);
+}
+
+// return the mouse(x,y) position
+function getMouseXY (event) {
+	var canvas = document.getElementById("canvas");
+	var rect = canvas.getBoundingClientRect();
+	var x = event.clientX - rect.left;
+	var y = event.clientY - rect.top;
+		
+	return {x , y};
+}
+
+function next(event) {
+	var mouseXY = getMouseXY(event);
+	var canvas = document.getElementById("canvas");
+	var context = canvas.getContext("2d");
+	
+	// Go to the next slide when clicked on the arrow image
+	if (mouseXY.x >= 376 && mouseXY.x <= 400) {
+		// when click in the top-half of the right side... to test whether or not the event listener has been wiped off
+		if (mouseXY.y >= 0 && mouseXY.y <= 150) {
+			context.clearRect(0, 0, 400, 300);
+			context.drawImage(beach, 0, 0, 400, 300);
+			canvas.removeEventListener("mousedown", next, false);	// Event Listener is removed
+			context.drawImage(arrow, 376, 75, 24, 24);
+			context.drawImage(arrow, 376, 225, 24, 24);
+		}
+		// when click in the bottom-half of the right side... to test whether or not the event listener has been wiped off
+		if (mouseXY.y >= 150 && mouseXY.y <= 300) {
+			context.clearRect(0, 0, 400, 300);
+			context.drawImage(forest, 0, 0, 400, 300);
+			canvas.removeEventListener("mousedown", next, false);	// Event Listener is removed
+			context.drawImage(arrow, 376, 75, 24, 24);
+			context.drawImage(arrow, 376, 225, 24, 24);
+		}
+	}
+}
+</script>
+
+<p>
+Clicking on the TOP-HALF arrow of the right side screen will move to the BEACH.
+<br>
+Clicking on the BOTTOM-HALF arrow of the right side screen will move to the FOREST.
+<br><br>
+I add the arrows back on so you can easily see where to click.
+<br>
+Now after the background has changed. Try clicking on where the arrows are, nothing happens right?
+<br><br>
+Refresh the page to test the arrows again.
+</p>
+<hr>
+<p>
+Play around with this line canvas.removeEventListener("...");
+<br>
+Commenting it out will not remove the event listeners and even after going context.clearRect(), the event listeners will remain on the arrows.
+<br>
+</p>
+</body>
+</html>
