@@ -58,6 +58,11 @@ Events.prototype.setStage = function(func) {
     this.listen();
 };
 
+Events.prototype.destroyStage = function(func) {
+    this.stage = func;
+    this.shush();
+};
+
 Events.prototype.reset = function(evt) {
     if (!evt) {
         evt = window.event;
@@ -113,6 +118,46 @@ Events.prototype.listen = function() {
         that.reset(evt);
     }, false);
     this.canvas.addEventListener("touchend", function(evt) {
+        evt.preventDefault();
+        that.touchEnd = true;
+        that.reset(evt);
+    }, false);
+};
+
+Events.prototype.shush = function() {
+    var that = this;
+    if (this.stage !== undefined) {
+        this.stage();
+    }
+    // desktop events
+    this.canvas.removeEventListener("mousedown", function(evt) {
+        that.mouseDown = true;
+        that.reset(evt);
+    }, false);
+    this.canvas.removeEventListener("mousemove", function(evt) {
+        that.reset(evt);
+    }, false);
+    this.canvas.removeEventListener("mouseup", function(evt) {
+        that.mouseUp = true;
+        that.reset(evt);
+    }, false);
+    this.canvas.removeEventListener("mouseover", function(evt) {
+        that.reset(evt);
+    }, false);
+    this.canvas.removeEventListener("mouseout", function(evt) {
+        that.mousePos = null;
+    }, false);
+    // mobile events
+    this.canvas.removeEventListener("touchstart", function(evt) {
+        evt.preventDefault();
+        that.touchStart = true;
+        that.reset(evt);
+    }, false);
+    this.canvas.removeEventListener("touchmove", function(evt) {
+        evt.preventDefault();
+        that.reset(evt);
+    }, false);
+    this.canvas.removeEventListener("touchend", function(evt) {
         evt.preventDefault();
         that.touchEnd = true;
         that.reset(evt);
